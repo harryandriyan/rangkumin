@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { Row, Col, Card } from 'antd'
 import { FilePdfOutlined, FileSearchOutlined, FileSyncOutlined } from '@ant-design/icons'
 import TableComponent from '../Manage/Table'
-import { useAuth } from "../../context/auth";
 
 const Home = () => {
   const [summaryLoading, setSummaryLoading] = useState(true);

@@ -2,23 +2,25 @@ import React, { useState } from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import { useAuth } from "../context/auth";
 import { login } from "../helpers/api";
+import { Form, Input, Button } from 'antd';
 
 export default function Login(props) {
   const history = useHistory();
   const [isLoggedIn, setLoggedIn] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const { setAuthTokens } = useAuth();
 
   const referer = history?.location?.state?.referer || "/";
 
-  const postLogin = (e) => {
-    e.preventDefault();
+  const postLogin = (values) => {
+    const { username, password } = values;
     login({ username, password })
       .then((response) => {
         if (response.accessToken) {
           setAuthTokens(response.accessToken);
           setLoggedIn(true);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         } else {
           console.error(response.reason);
         }
@@ -30,29 +32,37 @@ export default function Login(props) {
   if (isLoggedIn) return <Redirect to={referer} />;
 
   return (
-    <main className="loginMain">
-      <form onSubmit={postLogin}>
-        <div>
-          <label>Username</label>
-          <input
-            type="text"
-            onChange={(e) => setUsername(e.target.value)}
-            value={username}
-            name="username"
-          />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            name="password"
-          />
-        </div>
-        <button type="submit"> Login </button>
-      </form>
-    </main>
+    <Form
+      name="login"
+      labelCol={{ span: 2 }}
+      wrapperCol={{ span: 8 }}
+      initialValues={{ remember: true }}
+      onFinish={postLogin}
+      onFinishFailed={() => window.alert("Login failed")}
+      autoComplete="off"
+    >
+      <Form.Item
+        label="Username"
+        name="username"
+        rules={[{ required: true, message: 'Please input your username!' }]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label="Password"
+        name="password"
+        rules={[{ required: true, message: 'Please input your password!' }]}
+      >
+        <Input.Password />
+      </Form.Item>
+
+      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+    </Form>
   );
 
 }

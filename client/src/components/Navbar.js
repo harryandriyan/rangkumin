@@ -1,26 +1,26 @@
 import React, { useState } from 'react'
-import { withRouter } from 'react-router-dom'
+import { withRouter, useHistory } from 'react-router-dom'
 import { Menu } from 'antd';
-import { AppstoreOutlined, HomeOutlined, LogoutOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, HomeOutlined, LogoutOutlined, LoginOutlined } from '@ant-design/icons';
 
 const Navbar = (props) => {
   const [activeMenu, setActiveMenu] = useState('');
+  const existingTokens = JSON.parse(localStorage.getItem("tokens"));
+  const [authTokens, setAuthTokens] = useState(existingTokens);
+  const history = useHistory();
 
-  function handleLogout() {
-    localStorage.removeItem('token')
-    props.history.push('/')
-    window.location.reload()
+  const handleLogout = () => {
+    setAuthTokens();
+    localStorage.removeItem("tokens");
+    window.location.reload();
   }
-
-  const token = 'token' //localStorage.getItem('token')
-  const userId = localStorage.getItem('userId')
-  const userName = localStorage.getItem('userName')
 
   return (
     <Menu 
       onClick={(e) => {
         setActiveMenu(e.key);
-        props.history.push(`/${e.key}`)
+        console.log('object', e)
+        history.push(`/${e.key}`)
       }} 
       selectedKeys={[activeMenu]} 
       mode="horizontal"
@@ -28,13 +28,15 @@ const Navbar = (props) => {
       <Menu.Item key="" icon={<HomeOutlined />}>
         Home
       </Menu.Item>
-      <Menu.Item key="manage" icon={<AppstoreOutlined />}>
-        Manage
-      </Menu.Item>
-      <div>
-        {token && (
+      {authTokens && (
+        <Menu.Item key="manage" icon={<AppstoreOutlined />}>
+          Manage
+        </Menu.Item>
+      )}
+      <React.Fragment>
+        {authTokens ? (
           <Menu.Item 
-            key="logout" 
+            key="logout"
             onClick={handleLogout}
             icon={<LogoutOutlined />}
             style={{ 
@@ -44,8 +46,19 @@ const Navbar = (props) => {
           >
             Logout
           </Menu.Item>
+        ) : (
+          <Menu.Item 
+            key="login" 
+            icon={<LoginOutlined />}
+            style={{ 
+              position: 'absolute',
+              right: '60px' 
+            }}
+          >
+            Login
+          </Menu.Item>
         )}
-      </div>
+      </React.Fragment>
     </Menu>
   )
 }
