@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans&display=swap');
+:root{
+  --background: #eeeeee;
+  --dark: #0B0C10;
+  --mid: #1F2833;
+  --light: #45A29E;
+  --extraLight: #66FCF1;
+  --grey: #C5C6C7;
+  --font: 'PT Sans', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  width: 100vw;
+  padding: 0 60px 0 60px;
+}
+
+.container {
+  max-width: 1200px;
+  padding: 40px 0 0 0;
+}
