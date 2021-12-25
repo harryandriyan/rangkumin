@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form, Input, Button, Upload, message, Card } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
+import { Corpus } from "../../library/index";
 
 const AddForm = () => {
   const [uploaded, setUploaded] = useState(false);
   const [title, setTitle] = useState('');
+  const [text, setText] = useState('');
+  const [result, setResult] = useState();
 
   const [form] = Form.useForm();
   const onFinish = values => {
@@ -13,26 +16,38 @@ const AddForm = () => {
 
   const normFile = (e) => {
     const { name } = e.file;
-    console.log('file name', name)
-    setTitle(name);
+    const fileName = name.split('..')[0];
+    setTitle(fileName);
+    form.setFieldsValue({ title: fileName });
     return e && e.fileList;
   };
   
   const draggerConfig = {
     name: 'file',
     multiple: false,
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+    action: '/api/document/extract',
     accept: '.pdf',
     onChange(info) {
-      const { status } = info.file;
+      const { status, response } = info.file;
+
       if (status !== 'uploading') {
         console.log(info.file, info.fileList);
       }
+
       if (status === 'done') {
         message.success(`${info.file.name} berhasil diupload.`);
+        setText(response);
+
+        const corpus = new Corpus(
+          ["document"],
+          [response]
+        );
+        setResult(corpus.getTopTermsForDocument("document"));
+
         setUploaded(true);
       } else if (status === 'error') {
         setUploaded(true);
+        setText('');
         message.error(`${info.file.name} gagal diupload.`);
       }
     },
@@ -40,6 +55,8 @@ const AddForm = () => {
       console.log('Dropped files', e.dataTransfer.files);
     },
   };
+
+  console.log('result', result);
 
   return (
     <Form form={form} onFinish={onFinish}>
@@ -51,14 +68,7 @@ const AddForm = () => {
             extra={<Button danger onClick={() => setUploaded(false)}>Batal</Button>}
             style={{ marginBottom: '20px' }}
           >
-            Contrary to popular belief, Lorem Ipsum is not simply random text. 
-            It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. 
-            Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of 
-            the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of 
-            the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from 
-            sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by 
-            Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. 
-            The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+            {text}
           </Card>
           <Form.Item name="title" label="Judul" rules={[{ required: true }]}>
             <Input />
@@ -74,7 +84,7 @@ const AddForm = () => {
         </React.Fragment>
       ) : (
         <Form.Item>
-          <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
+          <Form.Item name="dragger" valuePropName="pdfFile" getValueFromEvent={normFile} noStyle>
             <Upload.Dragger {...draggerConfig}>
               <p className="ant-upload-drag-icon">
                 <InboxOutlined />
