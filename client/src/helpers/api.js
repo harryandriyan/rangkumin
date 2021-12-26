@@ -1,5 +1,5 @@
 export function API({ endpoint = "", method = "GET", data = {} }, authTokens) {
-  const config = {
+  let config = {
     method,
     headers: {
       Accept: "application/json",
@@ -7,6 +7,10 @@ export function API({ endpoint = "", method = "GET", data = {} }, authTokens) {
       Authorization: `Bearer ${authTokens}`,
     },
   };
+  if (method === 'POST') {
+    config.body = JSON.stringify(data)
+  }
+
   return fetch(endpoint, config)
     .then((response) => {
       return response.json();

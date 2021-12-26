@@ -1,50 +1,50 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Table, Tag, Space } from 'antd';
+import { API } from '../../helpers/api';
 
 const columns = [
   {
-    title: '#',
-    dataIndex: 'key',
-    key: 'no',
-  },
-  {
-    title: 'Title',
+    title: 'Judul',
     dataIndex: 'title',
     key: 'title',
+    width: '50%',
     render: text => <a>{text}</a>,
   },
   {
-    title: 'Year',
+    title: 'Tahun',
     dataIndex: 'year',
     key: 'year',
   },
   {
     title: 'Fakultas',
-    dataIndex: 'fakultas',
-    key: 'fakultas',
+    dataIndex: 'faculty',
+    key: 'faculty',
   },
   {
     title: 'Tags',
     key: 'tags',
     dataIndex: 'tags',
     render: tags => (
-      <>
-        {tags.map(tag => {
-          let color = 'green';
-          if (tag === 'tf-idf') {
-            color = 'volcano';
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
+      <Tag color={'green'}>
+        sample
+      </Tag>
+      // <>
+      //   {tags.map(tag => {
+      //     let color = 'green';
+      //     if (tag === 'tf-idf') {
+      //       color = 'volcano';
+      //     }
+      //     return (
+      //       <Tag color={color} key={tag}>
+      //         {tag.toUpperCase()}
+      //       </Tag>
+      //     );
+      //   })}
+      // </>
     ),
   },
   {
-    title: 'Action',
+    title: '',
     key: 'action',
     render: (text, record) => (
       <Space size="middle">
@@ -79,8 +79,48 @@ const data = [
 ];
 
 const TableComponent = () => {
+  const [documents, setDocuments] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+  });
+
+  const fetchDocuments = async (params = {}) => {
+    const url = `/api/documents?page=${pagination.current}&size=${pagination.pageSize}`;
+    API(
+      { endpoint: url, method: 'GET' }
+    ).then(res => {
+      console.log(res)
+      if (res.documents.length > 0) {
+        setDocuments(res.documents);
+        setLoading(false);
+        setPagination({...pagination, total: res.totalItems});
+      }
+    });
+  }
+
+  const handlePageChange = (pagination, filters, sorter) => {
+    fetchDocuments({
+      sortField: sorter.field,
+      sortOrder: sorter.order,
+      pagination,
+      ...filters,
+    });
+  };
+
+  useEffect(() => {
+    fetchDocuments({ pagination });
+  }, [])
+
   return (
-    <Table columns={columns} dataSource={data} />
+    <Table 
+      columns={columns} 
+      dataSource={documents} 
+      pagination={pagination}
+      loading={loading}
+      onChange={handlePageChange}
+    />
   );
 }
 

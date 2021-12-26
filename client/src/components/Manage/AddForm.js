@@ -1,7 +1,23 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Input, Button, Upload, message, Card } from 'antd';
+import { Form, Input, Button, Upload, message, Card, Table } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
+import ShowMoreText from "react-show-more-text";
+
 import { Corpus } from "../../library/index";
+import { API } from '../../helpers/api';
+
+const resultColumn = [
+  {
+    title: 'Word',
+    dataIndex: 'word',
+    key: 'word',
+  },
+  {
+    title: 'Value',
+    dataIndex: 'value',
+    key: 'value',
+  },
+];
 
 const AddForm = () => {
   const [uploaded, setUploaded] = useState(false);
@@ -11,7 +27,20 @@ const AddForm = () => {
 
   const [form] = Form.useForm();
   const onFinish = values => {
-    console.log('Received values of form: ', values);
+    const { year, title, faculty} = values;
+    const tags = JSON.stringify(result);
+    const bodyParam = {year, title, faculty, tags};
+    const tokens = JSON.parse(localStorage.getItem("tokens"));
+
+    API(
+      { endpoint: '/api/document/add', method: 'POST', data: bodyParam },
+      tokens
+    ).then(res => {
+      if (res.status === 200) {
+        message.success('Document added successfully!');
+        setUploaded(false);
+      }
+    });
   };
 
   const normFile = (e) => {
@@ -35,14 +64,23 @@ const AddForm = () => {
       }
 
       if (status === 'done') {
-        message.success(`${info.file.name} berhasil diupload.`);
+        message.success(`${info.file.name} berhasil diproses.`);
         setText(response);
 
         const corpus = new Corpus(
           ["document"],
           [response]
         );
-        setResult(corpus.getTopTermsForDocument("document"));
+        const result = corpus.getTopTermsForDocument("document", 10);
+        console.log('result', result)
+        const formattedResult = result.map(item => {
+          return {
+            word: item[0],
+            value: item[1]
+          }
+        });
+
+        setResult(formattedResult);
 
         setUploaded(true);
       } else if (status === 'error') {
@@ -56,8 +94,6 @@ const AddForm = () => {
     },
   };
 
-  console.log('result', result);
-
   return (
     <Form form={form} onFinish={onFinish}>
       {uploaded ? (
@@ -68,12 +104,28 @@ const AddForm = () => {
             extra={<Button danger onClick={() => setUploaded(false)}>Batal</Button>}
             style={{ marginBottom: '20px' }}
           >
-            {text}
+            <ShowMoreText
+              lines={3}
+              more="Lihat semua"
+              less="Lihat sedikit"
+              expanded={false}
+              width={1100}
+              truncatedEndingComponent={"... "}
+            >
+              {text}
+            </ShowMoreText>
           </Card>
+
+          <h3>Hasil TF-IDF</h3>
+          <Table columns={resultColumn} dataSource={result} />
+
           <Form.Item name="title" label="Judul" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
           <Form.Item name="year" label="Tahun" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="faculty" label="Fakultas" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
           <Form.Item style={{ marginTop: '20px', float: 'right' }}>

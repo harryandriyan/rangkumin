@@ -6,10 +6,12 @@
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "antd": "^4.17.4",
+    "qs": "^6.10.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "react-show-more-text": "^1.5.2"
   },
   "scripts": {
     "start": "react-scripts start",
