@@ -70,11 +70,10 @@ const TableComponent = ({ showOnly = false }) => {
       dataIndex: 'tags',
       render: (tags, record) => {
         const colors = ['magenta', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'];
-        const tagList = JSON.parse(tags, true);
 
         return (
           <>
-            {tagList.map((tag, index) => (
+            {tags.map((tag, index) => (
               <Tag color={colors[(index + record.id) % colors.length]} key={tag.word}>
                 {tag.word}
               </Tag>

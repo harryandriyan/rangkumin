@@ -28,7 +28,7 @@ const AddForm = () => {
   const [form] = Form.useForm();
   const onFinish = values => {
     const { year, title, faculty} = values;
-    const tags = JSON.stringify(result);
+    const tags = result;
     const bodyParam = {year, title, faculty, tags};
     const tokens = JSON.parse(localStorage.getItem("tokens"));
 

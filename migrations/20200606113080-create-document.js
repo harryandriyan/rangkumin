@@ -18,7 +18,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       tags: {
-        type: Sequelize.TEXT
+        type: Sequelize.JSONB
       },
       createdAt: {
         allowNull: false,

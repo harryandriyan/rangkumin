@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     faculty: DataTypes.STRING,
     year: DataTypes.INTEGER,
-    tags: DataTypes.TEXT,
+    tags: DataTypes.JSONB,
   }, {});
 
   return Document;
