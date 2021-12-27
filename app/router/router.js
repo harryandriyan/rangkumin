@@ -16,7 +16,7 @@ module.exports = function (app) {
 
   app.post("/api/document/extract", documentController.extract);
   app.post("/api/document/add", [authJwt.verifyToken], documentController.addDoc);
-  app.post("/api/document/delete", [authJwt.verifyToken], documentController.delete);
+  app.delete("/api/document/:id", [authJwt.verifyToken], documentController.delete);
   app.get("/api/documents", documentController.findAll);
 
   app.get("*", (req, res) => {

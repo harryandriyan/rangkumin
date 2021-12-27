@@ -5,6 +5,7 @@ import { AuthContext } from "../context/auth";
 import Home from './Home/index'
 import Login from './Login'
 import Manage from './Manage'
+import Search from './Search'
 import Navbar from './Navbar'
 
 import 'antd/dist/antd.css';
@@ -29,6 +30,7 @@ const App = () => {
               <Route exact path="/" component={Home} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/manage" component={Manage} />
+              <Route exact path="/search" component={Search} />
             </Switch>
           </Col>
         </Row>

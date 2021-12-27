@@ -66,12 +66,13 @@ exports.findAll = (req, res) => {
 };
 
 exports.delete = (req, res) => {
+  const { id } = req.params
   Document.destroy({
-    id: req.body.id,
-  }).then((document) => {
+    where: {id: id},
+  }).then(() => {
       res
         .status(200)
-        .json({ status: 200, message: "Document deleted successfully!", document });
+        .json({ status: 200, message: "Document deleted successfully!" });
     })
     .catch((err) => {
       res.status(400).json({ status: 400, message: "Error -> " + err });

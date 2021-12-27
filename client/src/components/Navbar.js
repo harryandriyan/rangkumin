@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { withRouter, useHistory } from 'react-router-dom'
 import { Menu } from 'antd';
-import { AppstoreOutlined, HomeOutlined, LogoutOutlined, LoginOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, HomeOutlined, SearchOutlined, LogoutOutlined, LoginOutlined } from '@ant-design/icons';
 
 const Navbar = (props) => {
   const [activeMenu, setActiveMenu] = useState('');
@@ -33,6 +33,9 @@ const Navbar = (props) => {
           Manage
         </Menu.Item>
       )}
+      <Menu.Item key="search" icon={<SearchOutlined />}>
+        Pencarian
+      </Menu.Item>
       <React.Fragment>
         {authTokens ? (
           <Menu.Item 

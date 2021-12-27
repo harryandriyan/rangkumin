@@ -34,12 +34,13 @@ export default function Login(props) {
   return (
     <Form
       name="login"
-      labelCol={{ span: 2 }}
-      wrapperCol={{ span: 8 }}
+      labelCol={{ span: 4 }}
+      wrapperCol={{ span: 12 }}
       initialValues={{ remember: true }}
       onFinish={postLogin}
       onFinishFailed={() => window.alert("Login failed")}
       autoComplete="off"
+      style={{ width: '500px', margin: '0 auto' }}
     >
       <Form.Item
         label="Username"
