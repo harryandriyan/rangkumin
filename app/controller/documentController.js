@@ -36,7 +36,7 @@ exports.findAll = (req, res) => {
 
   const getPagination = (page, size) => {
     const limit = size ? +size : 3;
-    const offset = page > 1 ? page * limit : 0;
+    const offset = 0 + (page ? page - 1 : 0) * limit;
   
     return { limit, offset };
   };
@@ -53,7 +53,6 @@ exports.findAll = (req, res) => {
 
   Document.findAndCountAll({ limit, offset })
     .then(data => {
-      console.log(data);
       const response = getPagingData(data, page, limit);
       res.send(response);
     })

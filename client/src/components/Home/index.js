@@ -58,7 +58,7 @@ const Home = () => {
       <Row gutter={16} style={{ marginTop: '40px' }}>
         <Col span={24}>
           <h3>Dokumen Terbaru</h3>
-          <TableComponent />
+          <TableComponent showOnly={5} />
         </Col>
       </Row>
     </div>

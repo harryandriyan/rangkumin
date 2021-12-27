@@ -2,34 +2,37 @@ import React, { useState, useEffect } from 'react'
 import { Table, Tag, Space, Popconfirm } from 'antd';
 import { API } from '../../helpers/api';
 
-const TableComponent = () => {
+const TableComponent = ({ showOnly = false }) => {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 10,
+    pageSize: 3,
   });
 
-  const fetchDocuments = async (params = {}) => {
-    const url = `/api/documents?page=${pagination.current}&size=${pagination.pageSize}`;
+  const fetchDocuments = ({ current, pageSize }) => {
+    const limitSize = showOnly ? showOnly : pageSize;
+    const url = `/api/documents?page=${current}&size=${limitSize}`;
     API(
       { endpoint: url, method: 'GET' }
     ).then(res => {
       if (res.documents.length > 0) {
         setDocuments(res.documents);
         setLoading(false);
-        setPagination({...pagination, total: res.totalItems});
+        if (!showOnly) {
+          setPagination({
+            ...pagination,
+            total: res.totalItems,
+            current: res.currentPage,
+          });
+        }
       }
     });
   }
 
-  const handlePageChange = (pagination, filters, sorter) => {
-    fetchDocuments({
-      sortField: sorter.field,
-      sortOrder: sorter.order,
-      pagination,
-      ...filters,
-    });
+  const handlePageChange = (paginationParam) => {
+    fetchDocuments(paginationParam);
+    setPagination(paginationParam)
   };
 
   const handleDelete = (id) => {
@@ -38,7 +41,7 @@ const TableComponent = () => {
       { endpoint: `/api/document/${id}`, method: 'DELETE' }, tokens
     ).then(res => {
       if (res.status === 200) {
-        fetchDocuments();
+        fetchDocuments(pagination);
       }
     });
   }
@@ -92,7 +95,7 @@ const TableComponent = () => {
   ];
 
   useEffect(() => {
-    fetchDocuments({ pagination });
+    fetchDocuments(pagination);
   }, [])
 
   return (
