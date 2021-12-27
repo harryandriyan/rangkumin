@@ -7,8 +7,9 @@ const TableComponent = ({ showOnly = false }) => {
   const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 3,
+    pageSize: 10,
   });
+  const tokens = JSON.parse(localStorage.getItem("tokens"));
 
   const fetchDocuments = ({ current, pageSize }) => {
     const limitSize = showOnly ? showOnly : pageSize;
@@ -36,7 +37,6 @@ const TableComponent = ({ showOnly = false }) => {
   };
 
   const handleDelete = (id) => {
-    const tokens = JSON.parse(localStorage.getItem("tokens"));
     API(
       { endpoint: `/api/document/${id}`, method: 'DELETE' }, tokens
     ).then(res => {
@@ -85,11 +85,15 @@ const TableComponent = ({ showOnly = false }) => {
     {
       title: '',
       key: 'action',
-      render: (text, record) => (
-        <Popconfirm title="Yakin akan menghapus dokumen ini?" onConfirm={() => handleDelete(record.id)}>
-          <a>Hapus</a>
-        </Popconfirm>
-      ),
+      render: (text, record) => {
+        if (tokens) {
+          return (
+            <Popconfirm title="Yakin akan menghapus dokumen ini?" onConfirm={() => handleDelete(record.id)}>
+              <a>Hapus</a>
+            </Popconfirm>
+          )
+        }
+      },
     },
   ];
 

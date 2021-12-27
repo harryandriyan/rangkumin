@@ -4,7 +4,8 @@ import { Menu } from 'antd';
 import { AppstoreOutlined, HomeOutlined, SearchOutlined, LogoutOutlined, LoginOutlined } from '@ant-design/icons';
 
 const Navbar = (props) => {
-  const [activeMenu, setActiveMenu] = useState('');
+  const currentPath = window.location.pathname.replace('/', '');
+  const [activeMenu, setActiveMenu] = useState(currentPath);
   const existingTokens = JSON.parse(localStorage.getItem("tokens"));
   const [authTokens, setAuthTokens] = useState(existingTokens);
   const history = useHistory();
