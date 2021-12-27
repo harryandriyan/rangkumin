@@ -65,24 +65,20 @@ const TableComponent = () => {
       title: 'Tags',
       key: 'tags',
       dataIndex: 'tags',
-      render: tags => (
-        <Tag color={'green'}>
-          sample
-        </Tag>
-        // <>
-        //   {tags.map(tag => {
-        //     let color = 'green';
-        //     if (tag === 'tf-idf') {
-        //       color = 'volcano';
-        //     }
-        //     return (
-        //       <Tag color={color} key={tag}>
-        //         {tag.toUpperCase()}
-        //       </Tag>
-        //     );
-        //   })}
-        // </>
-      ),
+      render: (tags, record) => {
+        const colors = ['magenta', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'];
+        const tagList = JSON.parse(tags, true);
+
+        return (
+          <>
+            {tagList.map((tag, index) => (
+              <Tag color={colors[(index + record.id) % colors.length]} key={tag.word}>
+                {tag.word}
+              </Tag>
+            ))}
+          </>
+        )
+      },
     },
     {
       title: '',

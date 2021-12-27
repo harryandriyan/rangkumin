@@ -45,7 +45,7 @@ const AddForm = () => {
 
   const normFile = (e) => {
     const { name } = e.file;
-    const fileName = name.split('..')[0];
+    const fileName = name.replace('.pdf', '');
     setTitle(fileName);
     form.setFieldsValue({ title: fileName });
     return e && e.fileList;
@@ -71,8 +71,7 @@ const AddForm = () => {
           ["document"],
           [response]
         );
-        const result = corpus.getTopTermsForDocument("document", 10);
-        console.log('result', result)
+        const result = corpus.getTopTermsForDocument("document", 5);
         const formattedResult = result.map(item => {
           return {
             word: item[0],
