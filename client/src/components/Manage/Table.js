@@ -127,7 +127,7 @@ const TableComponent = ({ showOnly = false }) => {
       />
       <Modal title="Detail Dokumen" width={960} visible={isModalVisible} footer={null} onCancel={() => setIsModalVisible(false)}>
         <Descriptions title="" bordered>
-          <Descriptions.Item label="Title" span={3}>{activeRecord?.title}</Descriptions.Item>
+          <Descriptions.Item label="Judul" span={3}>{activeRecord?.title}</Descriptions.Item>
           <Descriptions.Item label="Fakultas" span={3}>{activeRecord?.faculty}</Descriptions.Item>
           <Descriptions.Item label="Tahun" span={3}>{activeRecord?.year}</Descriptions.Item>
           <Descriptions.Item label="Topik (tags)" span={3}>
