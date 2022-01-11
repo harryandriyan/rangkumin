@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     faculty: DataTypes.STRING,
     year: DataTypes.INTEGER,
     tags: DataTypes.JSONB,
+    text: DataTypes.TEXT,
   }, {});
 
   return Document;

@@ -29,7 +29,7 @@ const AddForm = () => {
   const onFinish = values => {
     const { year, title, faculty} = values;
     const tags = result;
-    const bodyParam = {year, title, faculty, tags};
+    const bodyParam = {year, title, faculty, tags, text};
     const tokens = JSON.parse(localStorage.getItem("tokens"));
 
     API(

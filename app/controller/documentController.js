@@ -20,6 +20,7 @@ exports.addDoc = (req, res) => {
     year: req.body.year,
     faculty: req.body.faculty,
     tags: req.body.tags,
+    text: req.body.text,
   })
     .then((document) => {
       res
@@ -50,8 +51,11 @@ exports.findAll = (req, res) => {
   };
 
   const { limit, offset } = getPagination(page, size);
+  const order = [
+    ['createdAt', 'DESC']
+  ];
 
-  Document.findAndCountAll({ limit, offset })
+  Document.findAndCountAll({ limit, offset, order })
     .then(data => {
       const response = getPagingData(data, page, limit);
       res.send(response);

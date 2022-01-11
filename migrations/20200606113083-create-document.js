@@ -20,6 +20,9 @@ module.exports = {
       tags: {
         type: Sequelize.JSONB
       },
+      text: {
+        type: Sequelize.TEXT
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
