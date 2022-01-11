@@ -3,7 +3,7 @@ import { Form, Input, Button, Upload, message, Card, Table } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import ShowMoreText from "react-show-more-text";
 
-import { Corpus } from "../../library/index";
+import { Corpus } from "../../processor/index";
 import { API } from '../../helpers/api';
 
 const resultColumn = [

@@ -1,10 +1,6 @@
 import Document from './Document.js';
 import Stopwords from './Stopwords.js';
 
-// Implements TF-IDF (Term Frequency - Inverse Document Frequency) using BM25 weighting, from:
-// https://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-356.pdf
-// Calculates term frequencies, term weights, and term vectors, and can return results for a given
-// query. Creates a Document for every text and also manages stopwords for the collection.
 export default class Corpus {
 
   // - "names" and "texts" are parallel arrays containing the document identifiers and the full
