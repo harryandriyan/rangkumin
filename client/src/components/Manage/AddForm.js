@@ -59,10 +59,6 @@ const AddForm = () => {
     onChange(info) {
       const { status, response } = info.file;
 
-      if (status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-
       if (status === 'done') {
         message.success(`${info.file.name} berhasil diproses.`);
         setText(response);
@@ -72,6 +68,7 @@ const AddForm = () => {
           [response]
         );
         const result = corpus.getTopTermsForDocument("document", 5);
+        console.log('result', result);
         const formattedResult = result.map(item => {
           return {
             word: item[0],
@@ -87,9 +84,6 @@ const AddForm = () => {
         setText('');
         message.error(`${info.file.name} gagal diupload.`);
       }
-    },
-    onDrop(e) {
-      console.log('Dropped files', e.dataTransfer.files);
     },
   };
 
